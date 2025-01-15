@@ -25,7 +25,7 @@ public:
         }
     }
 };
-class HeatingSystem {
+class Boiler {
 public:
     void turnOn() {
         std::cout << "Heating system turned on." << std::endl;
@@ -40,7 +40,6 @@ class Thermostat {
 private:
     double currentTemperature;
 
-
 public:
     Thermostat(double temperature) : currentTemperature(temperature) {}
 
@@ -48,7 +47,7 @@ public:
         return currentTemperature;
     }
 
-    void maintainTemp(HeatingSystem t_heating, double targetTemperature) {
+    void maintainTemp(Boiler t_heating, double targetTemperature) {
         if (currentTemperature < targetTemperature)
         {
             t_heating.turnOn();
@@ -119,14 +118,30 @@ public:
     void useAmmo() {
         ammo--;
     }
+
+    bool validAttack() {
+        if (health > 0 && ammo > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    void executeAttack()
+    {
+        takeDamage(10);
+        useAmmo();
+    }
 };
 
 class Game {
 public:
     void enemyAttack(Player& player) {
-        if (player.getHealth() > 0 && player.getAmmo() > 0) {
-            player.takeDamage(10);
-            player.useAmmo();
+        if (player.validAttack()) {
+            player.executeAttack();
             std::cout << "Player attacked and used ammo." << std::endl;
         }
         else {
@@ -150,7 +165,7 @@ int main() {
     //////////////////////////////////////////////////////////////////
 
     Thermostat thermostat(18.5);
-    HeatingSystem heating;
+    Boiler heating;
 
     thermostat.maintainTemp(heating, 20.0);
     
