@@ -40,11 +40,23 @@ class Thermostat {
 private:
     double currentTemperature;
 
+
 public:
     Thermostat(double temperature) : currentTemperature(temperature) {}
 
     double getCurrentTemperature() const {
         return currentTemperature;
+    }
+
+    void maintainTemp(HeatingSystem t_heating, double targetTemperature) {
+        if (currentTemperature < targetTemperature)
+        {
+            t_heating.turnOn();
+        }
+        else
+        {
+            t_heating.turnOff();
+        }
     }
 };
 #include <iostream>
@@ -141,12 +153,7 @@ int main() {
     Thermostat thermostat(18.5);
     HeatingSystem heating;
 
-    if (thermostat.getCurrentTemperature() < 20.0) {
-        heating.turnOn();
-    }
-    else {
-        heating.turnOff();
-    }
+    thermostat.maintainTemp(heating, 20.0);
     
     //////////////////////////////////////////////////////////////////
     // Exercise 3
